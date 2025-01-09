@@ -1,11 +1,11 @@
 const { DEV, VITE_LOCAL } = import.meta.env
 
-import { storyService as local } from './story.service.local'
-import { storyService as remote } from './story.service.remote'
+import { userService as local } from './story.service.local'
+import { userService as remote } from './story.service.remote'
 
-function getEmptyStory() {
+function getEmptyUser() {
     return {
-        storyname: '', 
+        username: '', 
         password: '', 
         fullname: '',
         isAdmin: false,
@@ -14,9 +14,9 @@ function getEmptyStory() {
 }
 
 const service = VITE_LOCAL === 'true' ? local : remote
-export const storyService = { ...service, getEmptyStory }
+export const userService = { ...service, getEmptyUser }
 
 // Easy access to this service from the dev tools console
 // when using script - dev / dev:local
 
-if(DEV) window.storyService = storyService
+if(DEV) window.userService = userService

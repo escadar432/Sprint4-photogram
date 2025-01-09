@@ -1,93 +1,73 @@
-import { storageService } from '../async-storage.service'
+import { storageService } from "../async-storage.service";
+import { makeId } from "../util.service";
+import { userService } from "../user";
 
-const STORAGE_KEY_LOGGEDIN_STORY = 'loggedinStory'
+const STORAGE_KEY = "story";
 
 export const storyService = {
-    login,
-    logout,
-    signup,
-    getStorys,
-    getById,
-    remove,
-    update,
-    getLoggedinStory,
-    saveLoggedinStory,
+  query,
+  getById,
+  save,
+  remove,
+  addStoryMsg,
+};
+window.cs = storyService;
+
+async function query(filterBy = { txt: "", price: 0 }) {
+  var storys = await storageService.query(STORAGE_KEY);
+  const { txt } = filterBy;
+
+  if (txt) {
+    const regex = new RegExp(filterBy.txt, "i");
+    storys = storys.filter(
+      (story) => regex.test(story.vendor) || regex.test(story.description)
+    )
+  }
+
+  return storys
 }
 
-async function getStorys() {
-    const storys = await storageService.query('story')
-    return storys.map(story => {
-        delete story.password
-        return story
-    })
+function getById(storyId) {
+  return storageService.get(STORAGE_KEY, storyId);
 }
 
-async function getById(storyId) {
-    return await storageService.get('story', storyId)
+async function remove(storyId) {
+  // throw new Error('Nope')
+  await storageService.remove(STORAGE_KEY, storyId);
 }
 
-function remove(storyId) {
-    return storageService.remove('story', storyId)
+async function save(story) {
+  var savedStory;
+  if (story._id) {
+    const storyToSave = {
+      _id: story._id,
+    };
+    savedStory = await storageService.put(STORAGE_KEY, storyToSave);
+  } else {
+    const storyToSave = {
+      vendor: story.vendor,
+      price: story.price,
+      speed: story.speed,
+      // Later, owner is set by the backend
+      owner: userService.getLoggedinUser(),
+      msgs: [],
+    };
+    savedStory = await storageService.post(STORAGE_KEY, storyToSave);
+  }
+  return savedStory;
 }
 
-async function update({ _id, score }) {
-    const story = await storageService.get('story', _id)
-    story.score = score
-    await storageService.put('story', story)
+async function addStoryMsg(storyId, txt) {
+  // Later, this is all done by the backend
+  const story = await getById(storyId);
 
-	// When admin updates other story's details, do not update loggedinStory
-    const loggedinStory = getLoggedinStory()
-    if (loggedinStory._id === story._id) saveLoggedinStory(story)
+  const msg = {
+    id: makeId(),
+    by: userService.getLoggedinUser(),
+    txt,
+  };
+  story.msgs.push(msg);
+  await storageService.put(STORAGE_KEY, story);
 
-    return story
-}
-
-async function login(storyCred) {
-    const storys = await storageService.query('story')
-    const story = storys.find(story => story.storyname === storyCred.storyname)
-
-    if (story) return saveLoggedinStory(story)
-}
-
-async function signup(storyCred) {
-    if (!storyCred.imgUrl) storyCred.imgUrl = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
-    storyCred.score = 10000
-
-    const story = await storageService.post('story', storyCred)
-    return saveLoggedinStory(story)
-}
-
-async function logout() {
-    sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_STORY)
-}
-
-function getLoggedinStory() {
-    return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_STORY))
-}
-
-function saveLoggedinStory(story) {
-	story = { 
-        _id: story._id, 
-        fullname: story.fullname, 
-        imgUrl: story.imgUrl, 
-        score: story.score, 
-        isAdmin: story.isAdmin 
-    }
-	sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_STORY, JSON.stringify(story))
-	return story
-}
-
-// To quickly create an admin story, uncomment the next line
-// _createAdmin()
-async function _createAdmin() {
-    const story = {
-        storyname: 'admin',
-        password: 'admin',
-        fullname: 'Mustafa Adminsky',
-        imgUrl: 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png',
-        score: 10000,
-    }
-
-    const newStory = await storageService.post('story', storyCred)
-    console.log('newStory: ', newStory)
+  return msg;
 }

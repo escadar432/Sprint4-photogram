@@ -37,9 +37,7 @@ async function save(story) {
     savedStory = await storageService.put(STORAGE_KEY, storyToSave);
   } else {
     const storyToSave = {
-      vendor: story.vendor,
-      price: story.price,
-      speed: story.speed,
+      txt: story.txt,
       // Later, owner is set by the backend
       owner: userService.getLoggedinUser(),
       msgs: [],
@@ -74,7 +72,6 @@ const story = {
 		imgUrl: 'http://some-img',
 	},
 	loc: {
-		// Optional
 		lat: 11.11,
 		lng: 22.22,
 		name: 'Lake Tahoe, California',

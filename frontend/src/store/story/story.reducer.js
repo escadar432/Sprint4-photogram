@@ -42,28 +42,28 @@ export function storyReducer(state = initialState, action) {
 
 // unitTestReducer()
 
-function unitTestReducer() {
-    var state = initialState
-    const story1 = { _id: 'b101', vendor: 'Story ' + parseInt(Math.random() * 10), msgs: [] }
-    const story2 = { _id: 'b102', vendor: 'Story ' + parseInt(Math.random() * 10), msgs: [] }
+// function unitTestReducer() {
+//     var state = initialState
+//     const story1 = { _id: 'b101', vendor: 'Story ' + parseInt(Math.random() * 10), msgs: [] }
+//     const story2 = { _id: 'b102', vendor: 'Story ' + parseInt(Math.random() * 10), msgs: [] }
 
-    state = storyReducer(state, { type: SET_STORYS, storys: [story1] })
-    console.log('After SET_STORYS:', state)
+//     state = storyReducer(state, { type: SET_STORYS, storys: [story1] })
+//     console.log('After SET_STORYS:', state)
 
-    state = storyReducer(state, { type: ADD_STORY, story: story2 })
-    console.log('After ADD_STORY:', state)
+//     state = storyReducer(state, { type: ADD_STORY, story: story2 })
+//     console.log('After ADD_STORY:', state)
 
-    state = storyReducer(state, { type: UPDATE_STORY, story: { ...story2, vendor: 'Good' } })
-    console.log('After UPDATE_STORY:', state)
+//     state = storyReducer(state, { type: UPDATE_STORY, story: { ...story2, vendor: 'Good' } })
+//     console.log('After UPDATE_STORY:', state)
 
-    state = storyReducer(state, { type: REMOVE_STORY, storyId: story2._id })
-    console.log('After REMOVE_STORY:', state)
+//     state = storyReducer(state, { type: REMOVE_STORY, storyId: story2._id })
+//     console.log('After REMOVE_STORY:', state)
 
-    const msg = { id: 'm' + parseInt(Math.random() * 100), txt: 'Some msg' }
-    state = storyReducer(state, { type: ADD_STORY_MSG, storyId: story1._id, msg })
-    console.log('After ADD_STORY_MSG:', state)
+//     const msg = { id: 'm' + parseInt(Math.random() * 100), txt: 'Some msg' }
+//     state = storyReducer(state, { type: ADD_STORY_MSG, storyId: story1._id, msg })
+//     console.log('After ADD_STORY_MSG:', state)
 
-    state = storyReducer(state, { type: REMOVE_STORY, storyId: story1._id })
-    console.log('After REMOVE_STORY:', state)
-}
+//     state = storyReducer(state, { type: REMOVE_STORY, storyId: story1._id })
+//     console.log('After REMOVE_STORY:', state)
+// }
 

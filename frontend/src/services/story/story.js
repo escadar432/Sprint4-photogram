@@ -1,22 +1,28 @@
 const { DEV, VITE_LOCAL } = import.meta.env
 
-import { userService as local } from './story.service.local'
-import { userService as remote } from './story.service.remote'
+//import {  makeId } from '../util.service'
 
-function getEmptyUser() {
+import { carService as local } from './car.service.local'
+import { carService as remote } from './car.service.remote'
+
+function getEmptyCar() {
+	return {
+		msgs: [],
+	}
+}
+
+function getDefaultFilter() {
     return {
-        username: '', 
-        password: '', 
-        fullname: '',
-        isAdmin: false,
-        score: 100,
+        txt: '',
+        sortField: '',
+        sortDir: '',
     }
 }
 
 const service = VITE_LOCAL === 'true' ? local : remote
-export const userService = { ...service, getEmptyUser }
+export const carService = { getEmptyCar, getDefaultFilter, ...service }
 
 // Easy access to this service from the dev tools console
 // when using script - dev / dev:local
 
-if(DEV) window.userService = userService
+if (DEV) window.carService = carService

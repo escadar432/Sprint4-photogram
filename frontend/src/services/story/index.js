@@ -1,6 +1,6 @@
 const { DEV, VITE_LOCAL } = import.meta.env
 
-import { getRandomIntInclusive, makeId } from '../util.service'
+import {  makeId } from '../util.service'
 
 import { storyService as local } from './story.service.local'
 import { storyService as remote } from './story.service.remote'
@@ -8,17 +8,13 @@ import { storyService as remote } from './story.service.remote'
 function getEmptyStory() {
 	return {
 		vendor: makeId(),
-		speed: getRandomIntInclusive(80, 240),
 		msgs: [],
 	}
 }
 
 function getDefaultFilter() {
     return {
-        txt: '',
-        minSpeed: '',
-        sortField: '',
-        sortDir: '',
+        txt: ''
     }
 }
 

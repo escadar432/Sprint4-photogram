@@ -91,3 +91,29 @@ async function _createAdmin() {
     const newUser = await storageService.post('user', userCred)
     console.log('newUser: ', newUser)
 }
+
+
+const user = {
+	_id: 'u101',
+	username: 'sunflower_power77',
+	password: 'mukmuk',
+	fullname: 'sunflower_power77 from CA.',
+	imgUrl: 'http://some-img',
+
+	following: [
+		{
+			_id: 'u106',
+			fullname: 'Dob',
+			imgUrl: 'http://some-img',
+		},
+	],
+	followers: [
+		{
+			_id: 'u105',
+			fullname: 'Bob',
+			imgUrl: 'http://some-img',
+		},
+	],
+	likedStoryIds: ['s105', 's122', 's173'], // can also use mini-stories { _id, imgUrl }
+	savedStoryIds: ['s104', 's111', 's423'], // can also use mini-stories { _id, imgUrl }
+}

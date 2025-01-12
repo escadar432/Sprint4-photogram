@@ -10,20 +10,12 @@ export const storyService = {
   save,
   remove,
   addStoryMsg,
-};
+}
 window.cs = storyService;
 
 async function query(filterBy = { txt: "", price: 0 }) {
   var storys = await storageService.query(STORAGE_KEY);
   const { txt } = filterBy;
-
-  if (txt) {
-    const regex = new RegExp(filterBy.txt, "i");
-    storys = storys.filter(
-      (story) => regex.test(story.vendor) || regex.test(story.description)
-    )
-  }
-
   return storys
 }
 
@@ -71,3 +63,61 @@ async function addStoryMsg(storyId, txt) {
 
   return msg;
 }
+
+const story = {
+	_id: 's101',
+	txt: 'Lake trip with the best 🩷',
+	imgUrl: 'http://some-img',
+	by: {
+		_id: 'u101',
+		fullname: 'sunflower_power77',
+		imgUrl: 'http://some-img',
+	},
+	loc: {
+		// Optional
+		lat: 11.11,
+		lng: 22.22,
+		name: 'Lake Tahoe, California',
+	},
+	comments: [
+		{
+			id: 'c1001',
+			by: {
+				_id: 'u105',
+				fullname: 'Bob',
+				imgUrl: 'http://some-img',
+			},
+			txt: 'good one!',
+			likedBy: [  // Optional
+				{
+					_id: 'u105',
+					fullname: 'Bob',
+					imgUrl: 'http://some-img',
+				},
+			],
+		},
+		{
+			id: 'c1002',
+			by: {
+				_id: 'u106',
+				fullname: 'Dob',
+				imgUrl: 'http://some-img',
+			},
+			txt: 'not good!',
+		},
+	],
+	likedBy: [
+		{
+			_id: 'u105',
+			fullname: 'Bob',
+			imgUrl: 'http://some-img',
+		},
+		{
+			_id: 'u106',
+			fullname: 'Dob',
+			imgUrl: 'http://some-img',
+		},
+	],
+	tags: ['fun', 'romantic'],
+}
+
